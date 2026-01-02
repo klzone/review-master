@@ -1,26 +1,118 @@
 @import "tailwindcss";
 
+/* ===== 复盘大师 主题配置 ===== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 品牌色 */
+  --color-primary: #2E3A59;
+  --color-primary-hover: #1e263b;
+  --color-accent: #F59E0B;
+  --color-accent-hover: #D97706;
+
+  /* 中国股市配色 (红涨绿跌) */
+  --color-trend-up: #EF4444;
+  --color-trend-down: #10B981;
+
+  /* 亮色主题 */
+  --color-background: #F8F9FA;
+  --color-card: #FFFFFF;
+  --color-border: #E5E7EB;
+
+  --color-text-main: #1F2937;
+  --color-text-sub: #6B7280;
+  --color-text-muted: #9CA3AF;
+}
+
+.dark {
+  /* 暗色主题 */
+  --color-background: #0B0E14;
+  --color-card: #161B26;
+  --color-border: #232D3F;
+
+  --color-text-main: #F3F4F6;
+  --color-text-sub: #9CA3AF;
+  --color-text-muted: #64748B;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* 品牌色 */
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+
+  /* 趋势色 */
+  --color-up: var(--color-trend-up);
+  --color-down: var(--color-trend-down);
+
+  /* 背景/卡片/边框 */
+  --color-bg: var(--color-background);
+  --color-card: var(--color-card);
+  --color-border: var(--color-border);
+
+  /* 文字 */
+  --color-text: var(--color-text-main);
+  --color-text-sub: var(--color-text-sub);
+  --color-text-muted: var(--color-text-muted);
+
+  /* 字体 */
+  --font-sans: "PingFang SC", "Noto Sans SC", "Helvetica Neue", "Arial", sans-serif;
+
+  /* 圆角 */
+  --radius-default: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ===== 基础样式 ===== */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+}
+
+/* ===== 隐藏滚动条 ===== */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ===== 自定义阴影 ===== */
+.shadow-soft {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+}
+.dark .shadow-soft {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+}
+
+.shadow-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+.dark .shadow-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-glow {
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+}
+
+/* ===== 点击反馈 ===== */
+.tap-highlight {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== 过渡动画 ===== */
+.transition-default {
+  transition: all 0.2s ease-in-out;
 }
