@@ -1,27 +1,22 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
+import { useUser } from '@/lib/hooks/useUser'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 
 export default function ProfilePage() {
-    const supabase = createClient()
+    const { user, loading, signOut } = useUser()
     const router = useRouter()
-    const [user, setUser] = useState<any>(null)
-    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        async function getUser() {
-            const { data: { user } } = await supabase.auth.getUser()
-            setUser(user)
-            setLoading(false)
+        if (!loading && !user) {
+            router.push('/login')
         }
-        getUser()
-    }, [supabase.auth])
+    }, [user, loading, router])
 
     const handleLogout = async () => {
-        await supabase.auth.signOut()
+        await signOut()
         router.push('/login')
     }
 

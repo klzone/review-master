@@ -18,22 +18,36 @@ export function useUser() {
 
     useEffect(() => {
         async function getUser() {
-            const supabase = createClient()
+            try {
+                const supabase = createClient()
+                const { data: { user }, error: userError } = await supabase.auth.getUser()
 
-            const { data: { user } } = await supabase.auth.getUser()
-            setUser(user)
+                if (userError) {
+                    console.error('[useUser] Auth error:', userError)
+                    setUser(null)
+                    setLoading(false)
+                    return
+                }
 
-            if (user) {
-                const { data: profile } = await supabase
-                    .from('user_profiles')
-                    .select('*')
-                    .eq('id', user.id)
-                    .single()
+                setUser(user)
 
-                setProfile(profile)
+                if (user) {
+                    const { data: profile, error: profileError } = await supabase
+                        .from('user_profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single()
+
+                    if (profileError) {
+                        console.error('[useUser] Profile fetch error:', profileError)
+                    }
+                    setProfile(profile)
+                }
+            } catch (err) {
+                console.error('[useUser] Unexpected error:', err)
+            } finally {
+                setLoading(false)
             }
-
-            setLoading(false)
         }
 
         getUser()

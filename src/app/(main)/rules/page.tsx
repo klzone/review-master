@@ -95,9 +95,12 @@ export default function RulesPage() {
         <PageContainer>
             {/* 顶部导航 */}
             <nav className="sticky top-0 z-50 bg-bg/95 backdrop-blur-md px-4 py-3 flex justify-between items-center border-b border-border">
-                <button className="p-2 -ml-2 rounded-full hover:bg-card transition-colors">
+                <button
+                    onClick={() => window.history.back()}
+                    className="p-2 -ml-2 rounded-full hover:bg-card transition-colors active:scale-95"
+                >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
                 <div className="flex items-center gap-2">
@@ -179,8 +182,8 @@ export default function RulesPage() {
                             key={category}
                             onClick={() => setSelectedCategory(category)}
                             className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-medium transition-all ${selectedCategory === category
-                                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                    : 'bg-card border border-border text-text-sub hover:text-text hover:border-text-sub/50'
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                : 'bg-card border border-border text-text-sub hover:text-text hover:border-text-sub/50'
                                 }`}
                         >
                             {category}
