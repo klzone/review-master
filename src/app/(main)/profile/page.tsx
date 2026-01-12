@@ -22,8 +22,17 @@ export default function ProfilePage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex flex-col items-center justify-center min-h-screen gap-4">
                 <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <div className="flex flex-col items-center gap-2">
+                    <p className="text-sm text-text-muted">正在加载用户信息...</p>
+                    <button
+                        onClick={handleLogout}
+                        className="text-xs text-primary underline opacity-50 hover:opacity-100 transition-opacity mt-4"
+                    >
+                        加载太久？强制退出并重试
+                    </button>
+                </div>
             </div>
         )
     }
