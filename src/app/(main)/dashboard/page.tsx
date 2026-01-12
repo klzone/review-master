@@ -32,7 +32,7 @@ export default function DashboardPage() {
                 <Card variant="elevated" padding="lg" className="relative overflow-hidden">
                     <div className="absolute -top-10 -right-10 w-40 h-40 bg-up/10 rounded-full blur-3xl pointer-events-none" />
 
-                    <div className="flex justify-between items-start mb-2 relative z-10">
+                    <div className="flex justify-between items-start mb-6 relative z-10">
                         <div>
                             <p className="text-sm font-medium text-text-sub">总资产</p>
                             <h3 className="text-3xl font-bold text-text mt-1">
@@ -44,8 +44,8 @@ export default function DashboardPage() {
                             </h3>
                         </div>
                         <div className={`flex items-center gap-1 px-2 py-1 rounded-lg border ${assetChange >= 0
-                                ? 'bg-up/10 border-up/20 text-up'
-                                : 'bg-down/10 border-down/20 text-down'
+                            ? 'bg-up/10 border-up/20 text-up'
+                            : 'bg-down/10 border-down/20 text-down'
                             }`}>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -58,6 +58,21 @@ export default function DashboardPage() {
                             <span className="text-xs font-bold">
                                 {assetChange >= 0 ? '+' : ''}{assetChange.toFixed(1)}%
                             </span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 relative z-10 mb-2">
+                        <div>
+                            <p className="text-xs font-medium text-text-sub mb-1">可用资金</p>
+                            <p className="text-base font-bold text-text">
+                                {loading ? '---' : `¥${stats?.availableCash?.toLocaleString('zh-CN', { minimumFractionDigits: 0 }) || '0'}`}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-xs font-medium text-text-sub mb-1">持仓市值</p>
+                            <p className="text-base font-bold text-text">
+                                {loading ? '---' : `¥${stats?.marketValue?.toLocaleString('zh-CN', { minimumFractionDigits: 0 }) || '0'}`}
+                            </p>
                         </div>
                     </div>
 

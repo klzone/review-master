@@ -9,12 +9,48 @@ export default function SettingsPage() {
     const [stampTax, setStampTax] = useState('0.001')
     const [darkMode, setDarkMode] = useState(false)
     const [notifications, setNotifications] = useState(true)
+    const [initialCapital, setInitialCapital] = useState('')
+    const { user } = useUser()
+    const [saving, setSaving] = useState(false)
 
+    import { useUser } from '@/lib/hooks'
+    import { createClient } from '@/lib/supabase/client'
     // 在实际开发中，这里会从 Supabase 或 LocalStorage 加载设置
     useEffect(() => {
         const savedDarkMode = document.documentElement.classList.contains('dark')
         setDarkMode(savedDarkMode)
-    }, [])
+
+        // 加载初始资金
+        async function loadProfile() {
+            if (!user) return
+            const supabase = createClient()
+            const { data } = await supabase
+                .from('user_profiles')
+                .select('initial_capital')
+                .eq('id', user.id)
+                .single()
+
+            if (data?.initial_capital) {
+                setInitialCapital(data.initial_capital.toString())
+            } else {
+                setInitialCapital('100000') // 默认值
+            }
+        }
+        loadProfile()
+    }, [user])
+
+    const handleSaveCapital = async () => {
+        if (!user || !initialCapital) return
+        setSaving(true)
+        const supabase = createClient()
+        await supabase
+            .from('user_profiles')
+            .update({ initial_capital: parseFloat(initialCapital) } as any)
+            .eq('id', user.id)
+
+        setSaving(false)
+        alert('初始资金设置已保存')
+    }
 
     const toggleDarkMode = () => {
         const newMode = !darkMode
@@ -40,6 +76,29 @@ export default function SettingsPage() {
                 </button>
                 <h1 className="text-2xl font-bold text-text">系统设置</h1>
             </header>
+
+            {/* 资金设置 */}
+            <div className="mt-4 space-y-4">
+                <h3 className="text-xs font-semibold text-text-muted px-1 uppercase tracking-widest mb-2">资金管理</h3>
+                <div className="bg-card rounded-2xl border border-border divide-y divide-border overflow-hidden shadow-soft">
+                    <div className="p-4 flex items-center justify-between">
+                        <div>
+                            <p className="font-medium text-text">初始本金</p>
+                            <p className="text-xs text-text-muted mt-0.5">用于计算收益率的基准本金</p>
+                        </div>
+                        <div className="relative flex items-center gap-2">
+                            <span className="text-sm font-bold text-text-muted">¥</span>
+                            <input
+                                type="number"
+                                value={initialCapital}
+                                onChange={(e) => setInitialCapital(e.target.value)}
+                                onBlur={handleSaveCapital}
+                                className="w-28 text-right bg-bg border-none rounded-lg py-1 px-3 text-sm font-bold text-primary focus:ring-1 focus:ring-primary/30"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {/* 交易费率设置 */}
             <div className="mt-4 space-y-4">
