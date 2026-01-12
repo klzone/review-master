@@ -102,7 +102,7 @@ export default function NewTradePage() {
             // 插入交易记录
             const { data: result, error: insertError } = await supabase
                 .from('trades')
-                .insert(insertData)
+                .insert(insertData as any)
                 .select()
 
             if (insertError) {
