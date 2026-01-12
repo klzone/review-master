@@ -8,12 +8,12 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         /*
-         * 匹配所有路由除了：
-         * - _next/static (静态文件)
-         * - _next/image (图片优化)
-         * - favicon.ico (网站图标)
-         * - public 文件夹中的文件
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
          */
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
     ],
 }

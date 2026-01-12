@@ -86,7 +86,7 @@ export function Header({
                         )}
                         {showSettings && (
                             <Link
-                                href="/settings"
+                                href="/profile/settings"
                                 className="p-2 rounded-full bg-card border border-border text-text-muted hover:text-text transition-colors"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
