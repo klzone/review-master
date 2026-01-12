@@ -294,7 +294,7 @@ export default function NewTradePage() {
             </form>
 
             {/* 底部按钮 */}
-            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-bg via-bg to-transparent z-20">
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-card border-t border-border z-40 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] safe-area-bottom">
                 <div className="max-w-md mx-auto flex gap-4">
                     <Link href="/trades" className="flex-1">
                         <Button variant="outline" fullWidth>
