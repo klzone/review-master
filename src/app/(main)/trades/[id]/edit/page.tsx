@@ -128,9 +128,9 @@ export default function EditTradePage({ params }: PageProps) {
 
             console.log('[EditTrade] Updating record:', updateData)
 
-            const { error: updateError } = await supabase
-                .from('trades')
-                .update(updateData as any)
+            const { error: updateError } = await (supabase
+                .from('trades') as any)
+                .update(updateData)
                 .eq('id', id)
                 .select()
 
