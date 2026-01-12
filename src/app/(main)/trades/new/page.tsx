@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { PageContainer } from '@/components/layout'
 import { Card, Button, Input, Tag } from '@/components/ui'
+import { useUser } from '@/lib/hooks'
 
 // 预设选项
 const MARKETS = [
@@ -23,6 +24,7 @@ const TRADE_TYPES = ['超短线', '日内交易', '波段', '中长线']
 
 export default function NewTradePage() {
     const router = useRouter()
+    const { user, loading: userLoading } = useUser()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -42,19 +44,20 @@ export default function NewTradePage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        console.log('[NewTrade] Starting submission...')
+
+        if (!user) {
+            console.error('[NewTrade] No user available for submission')
+            setError('未登录或登录已过期，请重新登录')
+            return
+        }
+
         setLoading(true)
         setError(null)
 
         try {
             const supabase = createClient()
-
-            // 获取当前用户
-            const { data: { user } } = await supabase.auth.getUser()
-
-            if (!user) {
-                router.push('/login')
-                return
-            }
+            console.log('[NewTrade] User authenticated:', user.id)
 
             // 计算盈亏
             let profitLoss = null
@@ -75,8 +78,7 @@ export default function NewTradePage() {
                 status = 'closed'
             }
 
-            // 插入交易记录
-            const { error: insertError } = await supabase.from('trades').insert({
+            const insertData = {
                 user_id: user.id,
                 stock_code: formData.stockCode.toUpperCase(),
                 stock_name: formData.stockName,
@@ -93,18 +95,30 @@ export default function NewTradePage() {
                 profit_loss_percent: profitLossPercent,
                 status,
                 review_status: 'pending',
-            } as any)
+            }
+
+            console.log('[NewTrade] Inserting record:', insertData)
+
+            // 插入交易记录
+            const { data: result, error: insertError } = await supabase
+                .from('trades')
+                .insert(insertData)
+                .select()
 
             if (insertError) {
+                console.error('[NewTrade] Insert error:', insertError)
                 setError(insertError.message)
             } else {
+                console.log('[NewTrade] Insert successful:', result)
                 router.push('/trades')
                 router.refresh()
             }
         } catch (err) {
+            console.error('[NewTrade] Unexpected error during submission:', err)
             setError('保存失败，请稍后重试')
         } finally {
             setLoading(false)
+            console.log('[NewTrade] Submission flow finished')
         }
     }
 
